@@ -70,7 +70,6 @@ class WhatsappService
     /**
      * @param $endpoint (The endpoint to be used - see private $endpoint)
      * @param array $data
-     * @return void (if there is any error an exception should be thrown)
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
 
@@ -94,7 +93,7 @@ class WhatsappService
                 if ($request->getStatusCode() == 200 || $request->getStatusCode() == 201) {
                     return json_decode($request->getContent());
                 } else {
-                    throw new \Exception($request->getBody()->getContents());
+                    throw new \Exception($request->getStatusCode());
                 }
             } else {
                 throw new \Exception('Unvalidated payload Exception');
@@ -232,9 +231,10 @@ class WhatsappService
         return $this->send('template');
     }
 
-    private function logErrors(Exception $exception)
+    private function logErrors(\Exception $exception)
     {
-        print "ERROR LOGGED:" . $exception->getMessage() . "\n";
+        throw ($exception);
+        //print "ERROR LOGGED:" . $exception->getMessage() . "\n";
     }
 }
 

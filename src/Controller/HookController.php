@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
 use App\Message\WhatsappNotification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -80,15 +79,23 @@ class HookController extends AbstractController
         $message = " ";
         $messageType = "";
 
+        $placeholders = [
+            $json -> q1,
+            $json-> a1,
+            $json-> a2,
+            $json -> a3,
+            $json -> a4
+        ];
+
+       
+
         if (!is_numeric($json->number)) {
             $message = 'This is not a number';
-        }
-    
-        else{
+        }else{
             try{
                 $whatsappService->sendWhatsApp(
                     $json->number, //Number
-                    [], //Placeholders
+                    [$placeholders], //Placeholders
                     'poll', //template
                     'en', //language
                     'f6baa15e_fb52_4d4f_a5a0_cde307dc3a85');
@@ -96,7 +103,7 @@ class HookController extends AbstractController
                 $status = "OK";
             }
             catch(\Exception $exception){
-                $logger->error($exception->getMessage());
+               dd($exception->getMessage());
             }
 
         }
