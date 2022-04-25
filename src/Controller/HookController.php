@@ -2,18 +2,21 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use App\Message\WhatsappNotification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\MessageService;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use App\Service\WhatsappService;
 
 class HookController extends AbstractController
 {
     #[Route('/hook-endpoint', name: 'hook_endpoint')]
     // POST
-    public function whatsappHook(MessageBusInterface $bus, MessageService $messageService): Response
+    public function whatsappHook(MessageBusInterface $bus, Request $request): Response
     {
 
         /*
@@ -45,7 +48,7 @@ class HookController extends AbstractController
          *
          */
 
-        //dd($messageService->sendWhatsAppText("34697110110","Hi there"));
+        //dd($WhatsappService->sendWhatsAppText("34697110110","Hi there"));
 
         $bus->dispatch(new WhatsappNotification('Whatsapp me!'));
 
